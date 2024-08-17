@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace GMTK_2024_RA.GameName.Systems.Dialogue
@@ -14,11 +12,17 @@ namespace GMTK_2024_RA.GameName.Systems.Dialogue
     {
         [SerializeField]
         private GameObject dialogue;
+        private GameObject dialogue_copy;
 
-        enum SizeBehaviour { Grow, Shrink}
-        //TODO: Refactor this out to 
+        [Header("Dialogue configurations")]
+        [SerializeField]
+        private string text = "Un saludo a todes";
         [SerializeField]
         private float animationLength = 1;
+        [SerializeField]
+        private Vector3 targetScale = Vector3.one;
+        [SerializeField]
+        private Vector3 initialPosition = Vector3.one;
         /// <summary>
         /// Grow dialogue on enter
         /// </summary>
@@ -28,20 +32,50 @@ namespace GMTK_2024_RA.GameName.Systems.Dialogue
             if (dialogue == null) return;
             if (!other.CompareTag("Player")) return;
             StopAllCoroutines();
-            StartCoroutine(ChangeSize(SizeBehaviour.Grow));
+            StartCoroutine(Grow());
         }
-
-        private IEnumerator ChangeSize(SizeBehaviour sb)
+        private void OnTriggerExit(Collider other)
         {
-            float elapsedTIme = 0;
-            Transform dialogue_t = dialogue.transform;
-            Vector3 initialScale = dialogue_t.localScale;
-            while (elapsedTIme < animationLength && dialogue != null)
+            if (dialogue == null) return;
+            if (!other.CompareTag("Player")) return;
+            StopAllCoroutines();
+            StartCoroutine(Shrink());
+        }
+        private IEnumerator Grow()
+        {
+            float elapsedTime = 0;
+            // Safety checks
+            if (dialogue_copy == null)
             {
-                elapsedTIme += Time.deltaTime;
-                dialogue_t.localScale = Vector3.Lerp(Vector3.zero, initialScale, elapsedTIme/animationLength);
+                dialogue_copy = Instantiate(dialogue);
+                dialogue_copy.GetComponent<Dialogue>().SetText(text);
+                dialogue_copy.transform.SetParent(transform, false);
+                dialogue_copy.transform.position = initialPosition;
+                dialogue_copy.transform.localScale = Vector3.zero;
+            }
+            Transform dialogueTransform = dialogue_copy.transform;
+            dialogue_copy.GetComponent<Dialogue>().SetText(text);
+            dialogueTransform.position = initialPosition;
+            while (elapsedTime < animationLength && dialogue_copy != null)
+            {
+                elapsedTime += Time.deltaTime;
+                dialogueTransform.localScale = Vector3.Lerp(Vector3.zero, targetScale, elapsedTime / animationLength);
                 yield return null;
+            }
+        }
+        private IEnumerator Shrink()
+        {
+            float elapsedTime = 0;
+            // Safety checks
+            if (dialogue_copy == null) yield return null;
 
+            Transform dialogue_t = dialogue_copy.transform;
+            Vector3 initialScale = dialogue_t.localScale;
+            while (elapsedTime < animationLength && dialogue_copy != null)
+            {
+                elapsedTime += Time.deltaTime;
+                dialogue_t.localScale = Vector3.Lerp(initialScale, Vector3.zero, elapsedTime / animationLength);
+                yield return null;
             }
         }
     }
