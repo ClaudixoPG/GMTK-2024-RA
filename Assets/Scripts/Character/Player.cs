@@ -75,6 +75,10 @@ public class Player : MonoBehaviour
 
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
 
+        //Apply a 45 degree rotation to the moveDir vector
+        moveDir = Quaternion.Euler(0, 45, 0) * moveDir;
+
+
         float moveDistance = moveSpeed * Time.deltaTime;
         
         //float playerRadius = .7f;

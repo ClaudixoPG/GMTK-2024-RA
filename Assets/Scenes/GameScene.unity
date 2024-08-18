@@ -521,7 +521,7 @@ MonoBehaviour:
   m_StreamingVersion: 20170927
   m_Priority: 10
   m_StandbyUpdate: 2
-  m_LookAt: {fileID: 1777174982}
+  m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 20
@@ -550,14 +550,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 897825390}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.22562438, y: 0.26146215, z: -0.06300195, w: 0.9363557}
-  m_LocalPosition: {x: -15.189, y: 15, z: -25.077}
+  m_LocalRotation: {x: 0.27984816, y: 0.3647052, z: -0.1159169, w: 0.88047624}
+  m_LocalPosition: {x: -50, y: 50, z: -50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 461337079}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Father: {fileID: 1269563216}
+  m_LocalEulerAnglesHint: {x: 27.095, y: 0, z: 0}
 --- !u!1 &927985490
 GameObject:
   m_ObjectHideFlags: 0
@@ -782,6 +782,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1269563214
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1269563216}
+  - component: {fileID: 1269563215}
+  m_Layer: 0
+  m_Name: CameraController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1269563215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1269563214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6448a098189212144947e5f90b749922, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  virtualCamera: {fileID: 897825391}
+--- !u!4 &1269563216
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1269563214}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 897825392}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1291114853
 GameObject:
   m_ObjectHideFlags: 0
@@ -859,11 +905,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioClipRefsSO: {fileID: 11400000, guid: 973893ca9fecfbe4189e9fa0945dd2d7, type: 2}
---- !u!4 &1777174982 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9116421396464255936, guid: 67e5e7cafd1ebac4891a2d67dd8a824e, type: 3}
-  m_PrefabInstance: {fileID: 8543631639439617217}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1890479467
 GameObject:
   m_ObjectHideFlags: 0
@@ -995,13 +1036,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2056509554}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.22562438, y: 0.26146215, z: -0.06300195, w: 0.9363557}
-  m_LocalPosition: {x: -15.189, y: 15, z: -25.077}
+  m_LocalRotation: {x: 0.27984816, y: 0.3647052, z: -0.1159169, w: 0.88047624}
+  m_LocalPosition: {x: -50, y: 50, z: -50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 27.095, y: 0, z: 0}
 --- !u!114 &2056509558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9146,7 +9187,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7512053572468583573
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10239,6 +10280,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5167102118182961141, guid: 67e5e7cafd1ebac4891a2d67dd8a824e, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 7007243800577980889, guid: 67e5e7cafd1ebac4891a2d67dd8a824e, type: 3}
       propertyPath: gameInput
       value: 
@@ -10957,4 +11002,4 @@ SceneRoots:
   - {fileID: 746744185}
   - {fileID: 1291114854}
   - {fileID: 3778662240702608}
-  - {fileID: 897825392}
+  - {fileID: 1269563216}
