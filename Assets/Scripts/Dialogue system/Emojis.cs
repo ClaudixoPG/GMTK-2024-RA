@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 namespace GMTK_2024_RA.GameName.Systems.Dialogue
 {
     public class Emojis
@@ -7,7 +8,7 @@ namespace GMTK_2024_RA.GameName.Systems.Dialogue
         public static List<EmojiMapItem> Map = new()
         {
             new("cara_sonriente", "\U0001F600"),
-            new("pulgar_arriba", "\U0001F44D"),
+            new("pulgar_arriba", "\U0001F47E"),
             new("corazon_rojo", "\U00002764"),
             new("sol", "\U00002600"),
             new("cara_llorando", "\U0001F622"),
