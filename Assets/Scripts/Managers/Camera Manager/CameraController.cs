@@ -6,7 +6,6 @@ using System.Collections;
 
 public class CinemachineCameraControl : MonoBehaviour
 {
-
     private CameraInputActions cameraInputActions;
 
     private Vector2 lookInput;
@@ -20,6 +19,8 @@ public class CinemachineCameraControl : MonoBehaviour
     public CinemachineVirtualCamera virtualCamera;
 
     //private CinemachineTransposer transposer;
+    private GameObject player;
+    private float offset; //distance between the player and the virtual camera
 
     private void Awake()
     {
@@ -32,12 +33,9 @@ public class CinemachineCameraControl : MonoBehaviour
         cameraInputActions.Camera.RotateLeft.performed += RotateLeft_performed;
         cameraInputActions.Camera.RotateRight.performed += RotateRight_performed;
 
-        // Obtener el componente Transposer para manipular la cámara
-        //transposer = virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+        player = GameObject.FindGameObjectWithTag("Player");
 
-        //Debug camera fov
-        Debug.Log("Camera FOV: " + virtualCamera.m_Lens.FieldOfView);
-
+        offset = Vector3.Distance(player.transform.position, virtualCamera.transform.position);
     }
 
     private void OnDestroy()
@@ -115,6 +113,12 @@ public class CinemachineCameraControl : MonoBehaviour
         }
 
         transform.rotation = endRotation;
+    }
+
+    private void LateUpdate()
+    {
+        //Follow the player with the camera and keep the same distance, use delay and lerp to smooth the movement
+        transform.position = Vector3.Lerp(transform.position, player.transform.position, 0.5f);
     }
 
 }

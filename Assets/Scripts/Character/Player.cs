@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     [SerializeField] private GameInput gameInput;
     //[SerializeField] private LayerMask countersLayerMask;
     [SerializeField] private Transform worldObjectHoldPoint;
+    public Transform cameraTransform;
 
 
     private bool isWalking;
@@ -76,13 +77,12 @@ public class Player : MonoBehaviour
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
 
         //Apply a 45 degree rotation to the moveDir vector
-        moveDir = Quaternion.Euler(0, 45, 0) * moveDir;
+        //moveDir = Quaternion.Euler(0, 45, 0) * moveDir;
 
+        //Get the camera's rotation in the Y axis and apply it to the moveDir vector 
+        moveDir = Quaternion.Euler(0, 45 + cameraTransform.eulerAngles.y, 0) * moveDir;
 
         float moveDistance = moveSpeed * Time.deltaTime;
-        
-        //float playerRadius = .7f;
-        //float playerHeight = 2f;
         
         //Get the player's radius and height from the collider
         CapsuleCollider playerCollider = GetComponent<CapsuleCollider>();
@@ -128,44 +128,6 @@ public class Player : MonoBehaviour
             }
 
         }
-
-        /*if (!canMove)
-        {
-            // Cannot move towards moveDir
-
-            // Attempt only X movement
-            Vector3 moveDirX = new Vector3(moveDir.x, 0, 0).normalized;
-            canMove = (moveDir.x < -.5f || moveDir.x > +.5f) && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirX, moveDistance);
-
-            if (canMove)
-            {
-                // Can move only on the X
-                moveDir = moveDirX;
-            }
-            else
-            {
-                // Cannot move only on the X
-
-                // Attempt only Z movement
-                Vector3 moveDirZ = new Vector3(0, 0, moveDir.z).normalized;
-                canMove = (moveDir.z < -.5f || moveDir.z > +.5f) && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirZ, moveDistance);
-
-                if (canMove)
-                {
-                    // Can move only on the Z
-                    moveDir = moveDirZ;
-                }
-                else
-                {
-                    // Cannot move in any direction
-                }
-            }
-        }
-
-        if (canMove)
-        {
-            transform.position += moveDir * moveDistance;
-        }*/
 
         isWalking = moveDir != Vector3.zero;
 

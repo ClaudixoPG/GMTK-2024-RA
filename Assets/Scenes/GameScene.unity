@@ -10288,6 +10288,10 @@ PrefabInstance:
       propertyPath: gameInput
       value: 
       objectReference: {fileID: 1890479468}
+    - target: {fileID: 7007243800577980889, guid: 67e5e7cafd1ebac4891a2d67dd8a824e, type: 3}
+      propertyPath: cameraTransform
+      value: 
+      objectReference: {fileID: 1269563216}
     - target: {fileID: 9116421396464255936, guid: 67e5e7cafd1ebac4891a2d67dd8a824e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
