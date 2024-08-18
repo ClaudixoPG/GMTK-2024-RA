@@ -1,5 +1,4 @@
 using TMPro;
-using UnityEditor.VersionControl;
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
@@ -21,6 +20,14 @@ public class EmojiConfigurator : MonoBehaviour
         spriteGlyphTable.Clear();
         // This never change for every glyph
         UnityEngine.TextCore.GlyphMetrics gm = new(emojiSize, emojiSize, 0, 0, 0);
+
+        var characterTable = tMP_SpriteAsset.spriteCharacterTable;
+        characterTable.Clear();
+        string jsonContent = File.ReadAllText("Assets/Scripts/Dialogue system/emojis-dataset.json");
+        Debug.Log(jsonContent);
+        // Parse JSON using JsonUtility
+        EmojiDataset data = JsonUtility.FromJson<EmojiDataset>(jsonContent);
+
         // Loop through all emojis
         for (int i = 0; i < emojiCount; i++)
         {
@@ -30,49 +37,86 @@ public class EmojiConfigurator : MonoBehaviour
             UnityEngine.TextCore.GlyphRect gr = new(x: posX, y: posY, emojiSize, emojiSize);
             var glyph = new TMP_SpriteGlyph((uint)i, gm, gr, scale: 1, atlasIndex: 0);
             spriteGlyphTable.Add(glyph);
+
+            var hexCode = System.Convert.ToUInt32(data.emojis[i].emoji.hexcode, 16);
+            var emjName = data.emojis[i].emoji.annotation;
+            var sprtChar = new TMP_SpriteCharacter(hexCode, glyph)
+            {
+                name = emjName
+            };
+            characterTable.Add(sprtChar);
         }
 
         EditorUtility.SetDirty(tMP_SpriteAsset);
         AssetDatabase.SaveAssets();
     }
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
-    public class Emoji
+    [ContextMenu("Change caracter table")]
+    public void ChangeCharacterEmojisAsset()
     {
-        public Emoji emoji { get; set; }
-        public int top { get; set; }
-        public int left { get; set; }
-        public int index { get; set; }
+        TMP_SpriteAsset tMP_SpriteAsset = Resources.Load<TMP_SpriteAsset>("Sprite Assets/Emojis");
+        var characterTable = tMP_SpriteAsset.spriteCharacterTable;
+        var spriteGlyphTable = tMP_SpriteAsset.spriteGlyphTable;
+
+        var hexCode = System.Convert.ToUInt32("1F600", 16);
+        var emjName = "cara_sonrie";
+        var sprtChar = new TMP_SpriteCharacter(hexCode, spriteGlyphTable[0])
+        {
+            name = emjName
+        };
+        characterTable.Add(sprtChar);
     }
 
-    public class Emoji2
+    [ContextMenu("Read json")]
+    public void ReadJson()
     {
-        public string emoji { get; set; }
-        public string hexcode { get; set; }
-        public string group { get; set; }
-        public string subgroups { get; set; }
-        public string annotation { get; set; }
-        public string tags { get; set; }
-        public string openmoji_tags { get; set; }
-        public string openmoji_author { get; set; }
-        public string openmoji_date { get; set; }
-        public string skintone { get; set; }
-        public string skintone_combination { get; set; }
-        public string skintone_base_emoji { get; set; }
-        public string skintone_base_hexcode { get; set; }
-        public double unicode { get; set; }
-        public int order { get; set; }
-    }
+        string jsonContent = File.ReadAllText("Assets/Scripts/Dialogue system/emojis-dataset.json");
+        Debug.Log(jsonContent);
 
+        var cosa = JsonUtility.FromJson<EmojiDataset>(jsonContent);
+        Debug.Log(cosa.name);
+    }
+    [System.Serializable]
+    public class Simpler
+    {
+        public int valor;
+        public string otro;
+    }
+    [System.Serializable]
+    public class EmojiInfo
+    {
+        public string emoji ;
+        public string hexcode ;
+        public string group ;
+        public string subgroups ;
+        public string annotation ;
+        public string tags ;
+        public string openmoji_tags ;
+        public string openmoji_author ;
+        public string openmoji_date ;
+        public string skintone ;
+        public string skintone_combination ;
+        public string skintone_base_emoji ;
+        public string skintone_base_hexcode ;
+        public double unicode ;
+        public int order;
+    }
+    [System.Serializable]
+    public class EmojiPosition
+    {
+        public EmojiInfo emoji;
+        public int top ;
+        public int left ;
+        public int index ;
+    }
+    [System.Serializable]
     public class EmojiDataset
     {
-        public string name { get; set; }
-        public int columns { get; set; }
-        public int rows { get; set; }
-        public int width { get; set; }
-        public int height { get; set; }
-        public int emojiSize { get; set; }
-        public List<Emoji> emojis { get; set; }
+        public string name;
+        public int columns;
+        public int rows   ;
+        public int width  ;
+        public int height;
+        public int emojiSize;
+        public List<EmojiPosition> emojis;
     }
-
-
 }
