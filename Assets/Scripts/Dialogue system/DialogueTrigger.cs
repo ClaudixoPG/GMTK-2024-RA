@@ -15,7 +15,7 @@ namespace GMTK_2024_RA.GameName.Systems.Dialogue
         private GameObject dialogue_copy;
 
         [Header("Dialogue configurations")]
-        [SerializeField]
+        [SerializeField, TextArea]
         private string text = "Un saludo a todes";
         [SerializeField]
         private float animationLength = 1;
