@@ -17,7 +17,12 @@ public class PivotController : MonoBehaviour
 
     private Vector3 _scaleDelta;
 
-    public Vector3 ScaleDelta => -_scaleDelta;
+    public Vector3 ScaleDelta => _scaleDelta;
+
+    public bool IsScaling => _interactingGizmo != null;
+
+    public delegate void EndScalingObject();
+    public event EndScalingObject onEndScaling;
 
     void Start()
     {
@@ -89,6 +94,7 @@ public class PivotController : MonoBehaviour
 
         if (_mouseLeftButtonAction.WasReleasedThisFrame() && _interactingGizmo != null)
         {
+            onEndScaling?.Invoke();
             _interactingGizmo.extends = 0;
             _interactingGizmo = null;
         }

@@ -18,26 +18,45 @@ public class ScalableObject : MonoBehaviour
     [SerializeField] private PivotController _controller;
     [SerializeField] private Transform _graphic;
 
+    private Vector3 _originalPos;
+    private Vector3 _originalScale;
+
     void Start()
     {
-        
+        _originalPos = _graphic.position;
+        _originalScale = _graphic.localScale;
     }
 
     void Update()
     {
-        Vector3 roundedPosition = new Vector3(
-           RoundToMultipleOfHalf(transform.position.x),
-           RoundToMultipleOfHalf(transform.position.y),
-           RoundToMultipleOfHalf(transform.position.z)
-       );
+        if (_controller.IsScaling)
+        {
+            var scaleFactor = Vector3.ClampMagnitude(_controller.ScaleDelta, 1f);
 
-        transform.position = roundedPosition;
+            Vector3 absScaleFactor = new Vector3(
+                Mathf.Abs(scaleFactor.x),
+                Mathf.Abs(scaleFactor.y),
+                Mathf.Abs(scaleFactor.z)
+            );
 
-        _graphic.localScale = new Vector3(Mathf.Clamp(transform.localScale.x, constrain_x.min, constrain_x.max), Mathf.Clamp(transform.localScale.y, constrain_y.min, constrain_y.max), Mathf.Clamp(transform.localScale.z, constrain_z.min, constrain_z.max));
-    }
+            var minScale = new Vector3(constrain_x.min, constrain_y.min, constrain_z.min);
+            var maxScale = new Vector3(constrain_x.max, constrain_y.max, constrain_z.max);
 
-    private float RoundToMultipleOfHalf(float value)
-    {
-        return Mathf.Round(value * 2) / 2f;
+            Vector3 newScale = _originalScale + Vector3.Scale(absScaleFactor, maxScale - _originalScale);
+
+            newScale = Vector3.Max(newScale, minScale);
+            newScale = Vector3.Min(newScale, maxScale);
+
+            Vector3 scaleDifference = newScale - _originalScale;
+
+            Vector3 positionOffset = new Vector3(
+                (scaleFactor.x < 0) ? scaleDifference.x * -0.5f : scaleDifference.x * 0.5f,
+                (scaleFactor.y < 0) ? scaleDifference.y * -0.5f : scaleDifference.y * 0.5f,
+                (scaleFactor.z < 0) ? scaleDifference.z * -0.5f : scaleDifference.z * 0.5f
+            );
+
+            _graphic.localScale = newScale;
+            _graphic.position = _originalPos + positionOffset;
+        }
     }
 }
