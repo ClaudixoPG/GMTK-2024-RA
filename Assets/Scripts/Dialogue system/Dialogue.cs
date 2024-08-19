@@ -16,11 +16,12 @@ namespace GMTK_2024_RA.GameName.Systems.Dialogue
     {
         public void SetText(string text)
         {
-            var em = new EmojiMapItem("happy_face", "\U0001F600");
-            string pattern = em.humanName;  // El patrón de búsqueda (key)
-            string replacement = em.utf32code;  // El código de reemplazo (value)
-
-            text = Regex.Replace(text, pattern, replacement);
+            foreach (var item in Emojis.Map)
+            {
+                string pattern = item.humanName;  // El patrón de búsqueda (key)
+                string replacement = item.utf32code;  // El código de reemplazo (value)
+                text = Regex.Replace(text, pattern, replacement);
+            }
             transform.GetComponentInChildren<TextMeshProUGUI>().text = text;
         }
 
