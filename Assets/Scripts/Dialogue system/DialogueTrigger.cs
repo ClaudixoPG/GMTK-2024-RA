@@ -10,11 +10,18 @@ namespace GMTK_2024_RA.GameName.Systems.Dialogue
     /// </summary>
     public class DialogueTrigger : MonoBehaviour
     {
+        public enum DialogueType
+        {
+            BeforeMission,
+            AfterMission
+        }
         [SerializeField]
         private GameObject dialogue;
         private GameObject dialogue_copy;
 
         [Header("Dialogue configurations")]
+        
+        public DialogueType dType = DialogueType.BeforeMission;
         [SerializeField, TextArea]
         private string text = "Un saludo a todes";
         [SerializeField]
@@ -29,7 +36,7 @@ namespace GMTK_2024_RA.GameName.Systems.Dialogue
         /// <param name="other"></param>
         private void OnTriggerEnter(Collider other)
         {
-            if (dialogue == null) return;
+            if (dialogue == null || !enabled) return;
             if (!other.CompareTag("Player")) return;
             StopAllCoroutines();
             StartCoroutine(Grow());
