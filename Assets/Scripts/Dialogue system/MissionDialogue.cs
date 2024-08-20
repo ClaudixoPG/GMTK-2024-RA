@@ -8,7 +8,7 @@ namespace GMTK_2024_RA.GameName.Systems.Dialogue
         DialogueTrigger[] dialogueTriggers = null;
         private void Start()
         {
-            animator = GetComponent<Animator>();
+            animator = GetComponentInChildren<Animator>();
             dialogueTriggers = GetComponents<DialogueTrigger>();
         }
         public void MissionCompleted(bool missionIsCompleted)

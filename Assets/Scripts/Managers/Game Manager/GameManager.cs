@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public event EventHandler OnGameUnpaused;
 
 
-    private enum State
+    public enum State
     {
         WaitingToStart,
         CountdownToStart,
@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private State state;
+    public State state;
     private float countdownToStartTimer = 3f;
     private float gamePlayingTimer;
     private float gamePlayingTimerMax = 3600f;

@@ -20,7 +20,7 @@ namespace GMTK_2024_RA.GameName.Systems.Dialogue
         private GameObject dialogue_copy;
 
         [Header("Dialogue configurations")]
-        
+
         public DialogueType dType = DialogueType.BeforeMission;
         [SerializeField, TextArea]
         private string text = "Un saludo a todes";
@@ -30,6 +30,18 @@ namespace GMTK_2024_RA.GameName.Systems.Dialogue
         private Vector3 targetScale = Vector3.one;
         [SerializeField]
         private Vector3 initialPosition = Vector3.one;
+
+        private void OnEnable()
+        {
+            if (dialogue_copy == null)
+            {
+                dialogue_copy = Instantiate(dialogue);
+                dialogue_copy.GetComponent<Dialogue>().SetText(text);
+                dialogue_copy.transform.SetParent(transform, false);
+                dialogue_copy.transform.localPosition = initialPosition;
+            }
+        }
+
         /// <summary>
         /// Grow dialogue on enter
         /// </summary>
@@ -38,16 +50,32 @@ namespace GMTK_2024_RA.GameName.Systems.Dialogue
         {
             if (dialogue == null || !enabled) return;
             if (!other.CompareTag("Player")) return;
-            StopAllCoroutines();
-            StartCoroutine(Grow());
+            DisplayDialogue();
+            //StopAllCoroutines();
+            //StartCoroutine(Grow());
         }
         private void OnTriggerExit(Collider other)
         {
             if (dialogue == null) return;
             if (!other.CompareTag("Player")) return;
-            StopAllCoroutines();
-            StartCoroutine(Shrink());
+            HideDialogue();
+            //StopAllCoroutines();
+            //StartCoroutine(Shrink());
         }
+
+        private void DisplayDialogue()
+        {
+            Transform dialogueTransform = dialogue_copy.transform;
+            dialogue_copy.GetComponent<Dialogue>().SetText(text);
+            dialogue_copy.GetComponent<Animator>().SetBool("isDisplay", true);
+            dialogueTransform.localPosition = initialPosition;
+        }
+
+        private void HideDialogue()
+        {
+            dialogue_copy.GetComponent<Animator>().SetBool("isDisplay", false);
+        }
+
         private IEnumerator Grow()
         {
             float elapsedTime = 0;
@@ -57,12 +85,12 @@ namespace GMTK_2024_RA.GameName.Systems.Dialogue
                 dialogue_copy = Instantiate(dialogue);
                 dialogue_copy.GetComponent<Dialogue>().SetText(text);
                 dialogue_copy.transform.SetParent(transform, false);
-                dialogue_copy.transform.position = initialPosition;
+                dialogue_copy.transform.localPosition = initialPosition;
                 dialogue_copy.transform.localScale = Vector3.zero;
             }
             Transform dialogueTransform = dialogue_copy.transform;
             dialogue_copy.GetComponent<Dialogue>().SetText(text);
-            dialogueTransform.position = initialPosition;
+            dialogueTransform.localPosition = initialPosition;
             while (elapsedTime < animationLength && dialogue_copy != null)
             {
                 elapsedTime += Time.deltaTime;

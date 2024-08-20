@@ -85,7 +85,7 @@ public class PivotController : MonoBehaviour
                     break;
                 case "+Y":
                 case "-Y":
-                    distance = worldMouse.y - objectScreenPosition.y;
+                    distance = objectScreenPosition.y -  worldMouse.y;
                     break;
             }
 

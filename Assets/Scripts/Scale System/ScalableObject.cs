@@ -42,7 +42,7 @@ public class ScalableObject : MonoBehaviour
     {
         Vector3 center = _controller.transform.position;
 
-        amount = 0.25f * Mathf.Sign(amount) * mouseDeltaMgn;
+        amount = -0.25f * Mathf.Sign(amount) * mouseDeltaMgn;
 
         if (axis == Vector3.one) 
         {
@@ -161,7 +161,7 @@ public class ScalableObject : MonoBehaviour
 
         foreach (Collider collider in colliders)
         {
-            if (collider.transform == _graphic)
+            if (collider.transform == _graphic.GetChild(0))
                 continue;
 
             if (IsColliderIntersectingBounds(collider, bounds))
