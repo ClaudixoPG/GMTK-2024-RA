@@ -31,6 +31,11 @@ namespace GMTK_2024_RA.GameName.Systems.Dialogue
         [SerializeField]
         private Vector3 initialPosition = Vector3.one;
 
+        public void SetText(string message)
+        {
+            text = message;
+        }
+
         private void OnEnable()
         {
             if (dialogue_copy == null)

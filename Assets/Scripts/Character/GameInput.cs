@@ -34,7 +34,6 @@ public class GameInput : MonoBehaviour {
 
     private PlayerInputActions playerInputActions;
 
-
     private void Awake() {
         Instance = this;
 
@@ -50,6 +49,11 @@ public class GameInput : MonoBehaviour {
         playerInputActions.Player.Interact.performed += Interact_performed;
         playerInputActions.Player.InteractAlternate.performed += InteractAlternate_performed;
         playerInputActions.Player.Pause.performed += Pause_performed;
+    }
+
+    public void StopReceivingInputs()
+    {
+        playerInputActions.Player.Disable();
     }
 
     private void OnDestroy() {

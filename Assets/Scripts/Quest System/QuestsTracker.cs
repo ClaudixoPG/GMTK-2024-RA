@@ -1,71 +1,118 @@
 using GMTK_2024_RA.GameName.Systems.Dialogue;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class QuestsTracker : MonoBehaviour
 {
     [System.Serializable]
-    public class Quest
+    public class QuestTask
     {
         public Transform trackedObject;
         public ScalableObject.Constrain target_x;
         public ScalableObject.Constrain target_y;
         public ScalableObject.Constrain target_z;
 
+        public bool isCompleted;
+    }
+
+    [System.Serializable]
+    public class Quest
+    {
+        public List<QuestTask> tasks = new List<QuestTask>();
+
         public MissionDialogue npc;
 
         public string uncompleted_message;
         public string completed_message;
 
-        public bool isCompleted;
+        public bool isQuestCompleted;
+
+        public void CheckTasks(ParticleSystem completedPrefab, ParticleSystem brokenPrefab)
+        {
+            int completedTasks = 0;
+
+            foreach (var task in tasks)
+            {
+                bool isCompleted = true;
+
+                if (!(task.trackedObject.localScale.x >= task.target_x.min && task.trackedObject.localScale.x <= task.target_x.max))
+                    isCompleted = false;
+
+                if (!(task.trackedObject.localScale.y >= task.target_y.min && task.trackedObject.localScale.y <= task.target_y.max))
+                    isCompleted = false;
+
+                if (!(task.trackedObject.localScale.z >= task.target_z.min && task.trackedObject.localScale.z <= task.target_z.max))
+                    isCompleted = false;
+
+                if (isCompleted)
+                {
+                    completedTasks++;
+                    if (!task.isCompleted && isCompleted)
+                    {
+                        task.isCompleted = true;
+
+                        var particle = Instantiate(completedPrefab);
+                        var objectBounds = task.trackedObject.GetComponentInChildren<Renderer>().bounds;
+                        float objectHeight = objectBounds.size.y;
+                        particle.transform.position = task.trackedObject.position + new Vector3(0, objectHeight / 2, 0);
+                    }
+                }
+                else
+                {
+                    if (task.isCompleted)
+                    {
+                        var particle = Instantiate(brokenPrefab);
+                        var objectBounds = task.trackedObject.GetComponentInChildren<Renderer>().bounds;
+                        float objectHeight = objectBounds.size.y;
+                        particle.transform.position = task.trackedObject.position + new Vector3(0, objectHeight / 2, 0);
+                    }
+
+                    task.isCompleted = false;
+                }
+            }
+
+            isQuestCompleted = completedTasks == tasks.Count;
+        }
     }
 
     public List<Quest> quests = new List<Quest>();
 
     [SerializeField] private ParticleSystem _completedPrefab;
+    [SerializeField] private ParticleSystem _brokenPrefab;
+
+    private void Start()
+    {
+        foreach (var quest in quests)
+        {
+            quest.npc.MissionCompleted(false, quest.uncompleted_message);
+        }
+    }
 
     private void Update()
     {
-        bool isGameOver = true;
-
         foreach (var quest in quests)
         {
-            bool isCompleted = true;
+            var beforeCheck = quest.isQuestCompleted;
 
-            if(!(quest.trackedObject.localScale.x >= quest.target_x.min && quest.trackedObject.localScale.x <= quest.target_x.max))
-                isCompleted = false;
+            quest.CheckTasks(_completedPrefab, _brokenPrefab);
 
-            if (!(quest.trackedObject.localScale.y >= quest.target_y.min && quest.trackedObject.localScale.y <= quest.target_y.max))
-                isCompleted = false;
-
-            if (!(quest.trackedObject.localScale.z >= quest.target_z.min && quest.trackedObject.localScale.z <= quest.target_z.max))
-                isCompleted = false;
-
-            if(isCompleted)
+            if(beforeCheck != quest.isQuestCompleted)
             {
-                if (!quest.isCompleted && isCompleted)
+                if (quest.isQuestCompleted)
                 {
-                    quest.isCompleted = true;
-
-                    var particle = Instantiate(_completedPrefab);
-                    particle.transform.position = quest.trackedObject.position;
-
-                    quest.npc.MissionCompleted(true);
+                    quest.npc.MissionCompleted(true, quest.completed_message);
                 }
-            }
-            else
-            {
-                isGameOver = false;
-
-                if(quest.isCompleted)
+                else
                 {
-                    quest.npc.MissionCompleted(false);
-                }
+                    quest.npc.MissionCompleted(false, quest.uncompleted_message);
 
-                quest.isCompleted = false;
+                }
             }
         }
+
+        bool isGameOver = quests.All(x => x.isQuestCompleted);
 
         if (isGameOver && GameManager.Instance.state != GameManager.State.GameOver)
         {

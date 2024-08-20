@@ -22,5 +22,4 @@ public class PlayerAnimator : MonoBehaviour {
     private void Update() {
         animator.SetFloat(SPEED, player.GetNormalizedSpeed());
     }
-
 }

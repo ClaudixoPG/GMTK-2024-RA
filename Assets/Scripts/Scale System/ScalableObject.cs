@@ -161,6 +161,9 @@ public class ScalableObject : MonoBehaviour
 
         foreach (Collider collider in colliders)
         {
+            if (collider.isTrigger)
+                continue;
+
             if (collider.transform == _graphic.GetChild(0))
                 continue;
 

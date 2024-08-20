@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     private float gamePlayingTimer;
     private float gamePlayingTimerMax = 3600f;
     private bool isGamePaused = false;
+    private bool isGameOver;
 
 
     private void Awake()
@@ -80,14 +81,21 @@ public class GameManager : MonoBehaviour
                     OnStateChanged?.Invoke(this, EventArgs.Empty);
                 }
 
-                //aqui la condición debiera ser que no quedan acertijos por resolver
-
-
-
                 break;
             case State.GameOver:
+                if(!isGameOver)
+                {
+                    FindAnyObjectByType<GameOverScreen>().StartGameOverScreen();
+                    isGameOver = true;
+                }
                 break;
         }
+    }
+
+    [ContextMenu("Game Over")]
+    public void ForceGameOver()
+    {
+        state = State.GameOver;
     }
 
     public bool IsGamePlaying()

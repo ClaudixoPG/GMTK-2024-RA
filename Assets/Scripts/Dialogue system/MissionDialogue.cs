@@ -5,45 +5,47 @@ namespace GMTK_2024_RA.GameName.Systems.Dialogue
     public class MissionDialogue : MonoBehaviour
     {
         Animator animator;
-        DialogueTrigger[] dialogueTriggers = null;
+        DialogueTrigger dialogue;
         private void Start()
         {
             animator = GetComponentInChildren<Animator>();
-            dialogueTriggers = GetComponents<DialogueTrigger>();
+            dialogue = GetComponent<DialogueTrigger>();
         }
-        public void MissionCompleted(bool missionIsCompleted)
+        public void MissionCompleted(bool missionIsCompleted, string message)
         {
             if (missionIsCompleted)
             {
                 //Happy state
                 animator.SetTrigger("missionCompleted");
-                foreach (var dialogueTrigger in dialogueTriggers)
-                {
-                    if (dialogueTrigger.dType == DialogueTrigger.DialogueType.AfterMission)
-                    {
-                        dialogueTrigger.enabled = true;
-                    }
-                    else
-                    {
-                        dialogueTrigger.enabled = false;
-                    }
-                }
+                dialogue.SetText(message);
+                //foreach (var dialogueTrigger in dialogueTriggers)
+                //{
+                //    if (dialogueTrigger.dType == DialogueTrigger.DialogueType.AfterMission)
+                //    {
+                //        dialogueTrigger.enabled = true;
+                //    }
+                //    else
+                //    {
+                //        dialogueTrigger.enabled = false;
+                //    }
+                //}
             }
             else
             {
                 //Angry state
                 animator.SetTrigger("wrongObject");
-                foreach (var dialogueTrigger in dialogueTriggers)
-                {
-                    if (dialogueTrigger.dType == DialogueTrigger.DialogueType.BeforeMission)
-                    {
-                        dialogueTrigger.enabled = true;
-                    }
-                    else
-                    {
-                        dialogueTrigger.enabled = false;
-                    }
-                }
+                dialogue.SetText(message);
+                //foreach (var dialogueTrigger in dialogueTriggers)
+                //{
+                //    if (dialogueTrigger.dType == DialogueTrigger.DialogueType.BeforeMission)
+                //    {
+                //        dialogueTrigger.enabled = true;
+                //    }
+                //    else
+                //    {
+                //        dialogueTrigger.enabled = false;
+                //    }
+                //}
             }
         }
     }
