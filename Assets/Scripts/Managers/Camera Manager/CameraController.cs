@@ -14,7 +14,7 @@ public class CinemachineCameraControl : MonoBehaviour
     private float zoomSpeed = 0.01f;
     public float zoomMin = 10f;
     public float zoomMax = 20f;
-    private float sensitivity = 1f;
+    private float sensitivity = 1f ;
 
     public CinemachineVirtualCamera virtualCamera;
 
