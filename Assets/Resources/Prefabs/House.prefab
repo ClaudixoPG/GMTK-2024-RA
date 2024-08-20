@@ -5470,7 +5470,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -2819160026528976783, guid: 594c6ab4d377b66498007a12a883eaf0, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -6626,7 +6627,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Door_4
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -8072310415788717765, guid: c27efeedc2fdb11469eb56c46f14bc76, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -7984,7 +7986,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Door_3
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1875254090408014967, guid: 6b3f6d68044825047896ecac66067926, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -9644,7 +9647,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Door_4 (2)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -8072310415788717765, guid: c27efeedc2fdb11469eb56c46f14bc76, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -10226,7 +10230,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Door_4
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -8072310415788717765, guid: c27efeedc2fdb11469eb56c46f14bc76, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -10288,7 +10293,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Door_4 (1)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -8072310415788717765, guid: c27efeedc2fdb11469eb56c46f14bc76, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -12736,7 +12742,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Door_4
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -8072310415788717765, guid: c27efeedc2fdb11469eb56c46f14bc76, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

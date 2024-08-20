@@ -11,19 +11,28 @@ public class Player : MonoBehaviour
     public event EventHandler OnPickedSomething;
 
     [SerializeField] private float moveSpeed = 7f;
+    [SerializeField] private float rotationSpeed = 7f;
+    [SerializeField] private float acceleration = 5f;      
+    [SerializeField] private float deceleration = 10f;
     [SerializeField] private GameInput gameInput;
     //[SerializeField] private LayerMask countersLayerMask;
     [SerializeField] private Transform worldObjectHoldPoint;
     public Transform cameraTransform;
 
+    private Rigidbody rb;
 
     private bool isWalking;
     //private Vector3 lastInteractDir;
     //private BaseCounter selectedCounter;
     private WorldObject WorldObject;
 
+    private Vector3 currentVelocity;
 
-
+    public float GetNormalizedSpeed()
+    {
+        float normalizedSpeed = (currentVelocity.magnitude / moveSpeed) * 5;
+        return Mathf.Clamp01(normalizedSpeed); 
+    }
     public bool IsWalking()
     {
         return isWalking;
@@ -42,6 +51,8 @@ public class Player : MonoBehaviour
     {
         gameInput.OnInteractAction += GameInput_OnInteractAction;
         gameInput.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
+
+        rb = GetComponent<Rigidbody>();
     }
 
     private void GameInput_OnInteractAlternateAction(object sender, EventArgs e)
@@ -66,8 +77,52 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        HandleMovement();
+        //HandleMovement();
         //HandleInteractions();
+        HandleInput();
+    }
+
+    private void FixedUpdate()
+    {
+        Movement();
+    }
+
+    private void HandleInput()
+    {
+        var axis = gameInput.GetMovementVectorNormalized();
+        Vector3 inputDirection = new Vector3(axis.x, 0f, axis.y).normalized;
+
+        Vector3 cameraForward = Camera.main.transform.forward;
+        Vector3 cameraRight = Camera.main.transform.right;
+
+        cameraForward.y = 0;
+        cameraRight.y = 0;
+        cameraForward.Normalize();
+        cameraRight.Normalize();
+
+        Vector3 targetMovement = cameraForward * inputDirection.z + cameraRight * inputDirection.x;
+
+        if (inputDirection.magnitude > 0)
+        {
+            currentVelocity = Vector3.Lerp(currentVelocity, targetMovement * moveSpeed, acceleration * Time.deltaTime);
+        }
+        else
+        {
+            currentVelocity = Vector3.Lerp(currentVelocity, Vector3.zero, deceleration * Time.deltaTime);
+        }
+    }
+
+    private void Movement()
+    {
+        rb.MovePosition(rb.position + currentVelocity * Time.fixedDeltaTime);
+
+        if (currentVelocity != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(currentVelocity, Vector3.up);
+            rb.rotation = Quaternion.Slerp(rb.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+        }
+
+        isWalking = currentVelocity.magnitude > 0.1f;
     }
 
     private void HandleMovement()

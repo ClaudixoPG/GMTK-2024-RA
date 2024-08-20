@@ -6,6 +6,7 @@ public class PlayerAnimator : MonoBehaviour {
 
 
     private const string IS_WALKING = "IsWalking";
+    private const string SPEED = "Speed";
 
 
     [SerializeField] private Player player;
@@ -19,7 +20,7 @@ public class PlayerAnimator : MonoBehaviour {
     }
 
     private void Update() {
-        animator.SetBool(IS_WALKING, player.IsWalking());
+        animator.SetFloat(SPEED, player.GetNormalizedSpeed());
     }
 
 }
