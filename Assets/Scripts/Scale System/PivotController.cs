@@ -9,6 +9,7 @@ public class PivotController : MonoBehaviour
     [SerializeField] private InputActionAsset _actionAsset;
 
     private InputAction _mousePositionAction;
+    private InputAction _mouseDeltaAction;
     private InputAction _mouseLeftButtonAction;
 
     private List<Transform> _selectedGizmosAxis = new List<Transform>();
@@ -17,13 +18,25 @@ public class PivotController : MonoBehaviour
 
     private Vector3 _scaleDelta;
 
-    public Vector3 ScaleDelta => -_scaleDelta;
+    public Vector3 ScaleDelta => _scaleDelta;
+
+    public bool IsScaling => _interactingGizmo != null;
+
+    public delegate void EndScalingObject();
+    public event EndScalingObject OnEndScaling;
+
+    public delegate void Scaling(Vector3 axis, float amount, float mouseDeltaMgn);
+    public event Scaling OnScaling;
+
+    private float _stepTimer;
+    private float _stepTimerCC = 0.1f;
 
     void Start()
     {
         _selectedGizmosAxis = new List<Transform>();
         _actionAsset.FindActionMap("Gameplay").Enable();
         _mousePositionAction = _actionAsset.FindActionMap("Gameplay").FindAction("Cursor Position");
+        _mouseDeltaAction = _actionAsset.FindActionMap("Gameplay").FindAction("Cursor Delta");
         _mouseLeftButtonAction = _actionAsset.FindActionMap("Gameplay").FindAction("Left Click");
     }
 
@@ -59,8 +72,11 @@ public class PivotController : MonoBehaviour
 
             var worldMouse = new Vector3(mousePosition.x, mousePosition.y, _interactingGizmo.transform.position.z);
 
+            Vector3 scalingGizmo = Vector3.zero;
+
             switch (_interactingGizmo.name)
             {
+                case "XYZ":
                 case "+X":
                 case "-X":
                 case "+Z":
@@ -70,6 +86,31 @@ public class PivotController : MonoBehaviour
                 case "+Y":
                 case "-Y":
                     distance = worldMouse.y - objectScreenPosition.y;
+                    break;
+            }
+
+            switch (_interactingGizmo.name)
+            {
+                case "+X":
+                    scalingGizmo = Vector3.right;
+                    break;
+                case "-X":
+                    scalingGizmo = Vector3.left;
+                    break;
+                case "+Z":
+                    scalingGizmo = Vector3.forward;
+                    break;
+                case "-Z":
+                    scalingGizmo = Vector3.back;
+                    break;
+                case "+Y":
+                    scalingGizmo = Vector3.up;
+                    break;
+                case "-Y":
+                    scalingGizmo = Vector3.down;
+                    break;
+                case "XYZ":
+                    scalingGizmo = Vector3.one;
                     break;
             }
 
@@ -85,10 +126,19 @@ public class PivotController : MonoBehaviour
             {
                 _interactingGizmo.extends = -extends * mouseSide;
             }
+
+            _stepTimer += Time.deltaTime;
+
+            if(_stepTimer > _stepTimerCC)
+            {
+                _stepTimer = 0;
+                OnScaling?.Invoke(scalingGizmo, distance, _mouseDeltaAction.ReadValue<Vector2>().magnitude);
+            }
         }
 
         if (_mouseLeftButtonAction.WasReleasedThisFrame() && _interactingGizmo != null)
         {
+            OnEndScaling?.Invoke();
             _interactingGizmo.extends = 0;
             _interactingGizmo = null;
         }
