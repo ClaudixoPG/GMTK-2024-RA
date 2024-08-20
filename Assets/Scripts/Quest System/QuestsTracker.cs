@@ -56,7 +56,7 @@ public class QuestsTracker : MonoBehaviour
                         var particle = Instantiate(completedPrefab);
                         var objectBounds = task.trackedObject.GetComponentInChildren<Renderer>().bounds;
                         float objectHeight = objectBounds.size.y;
-                        particle.transform.position = task.trackedObject.position + new Vector3(0, objectHeight / 2, 0);
+                        particle.transform.position = task.trackedObject.position + new Vector3(0, (objectHeight / 2) + 1, 0);
                     }
                 }
                 else
