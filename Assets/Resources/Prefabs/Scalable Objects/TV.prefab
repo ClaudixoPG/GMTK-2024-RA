@@ -273,12 +273,15 @@ MonoBehaviour:
   constrain_x:
     min: 1
     max: 4
+    initial: 1
   constrain_y:
     min: 1
     max: 4
+    initial: 1
   constrain_z:
     min: 1
     max: 4
+    initial: 1
   _controller: {fileID: 3188444971486553805}
   _graphic: {fileID: 3323304858775108831}
 --- !u!1 &2834760057601849719

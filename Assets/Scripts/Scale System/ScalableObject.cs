@@ -6,6 +6,7 @@ public class ScalableObject : MonoBehaviour
     public struct Constrain
     {
         public float min, max;
+        public float initial;
     }
 
     public Constrain constrain_x;
@@ -22,8 +23,6 @@ public class ScalableObject : MonoBehaviour
     {
         InitializeVertices();
         UpdateGraphicTransform();
-
-        
     }
 
     private void OnEnable()
@@ -228,9 +227,12 @@ public class ScalableObject : MonoBehaviour
         _graphic.localScale = size;
     }
 
+    [ContextMenu("Reset Verices")]
     void InitializeVertices()
     {
-        Bounds bounds = new Bounds(_controller.transform.position, Vector3.one);
+        var initialBounds = new Vector3(constrain_x.initial, constrain_y.initial, constrain_z.initial);
+
+        Bounds bounds = new Bounds(_controller.transform.position, initialBounds);
 
         _vertices[0] = bounds.min;
         _vertices[1] = new Vector3(bounds.min.x, bounds.min.y, bounds.max.z);
@@ -247,12 +249,17 @@ public class ScalableObject : MonoBehaviour
 
         for (int i = 0; i < _vertices.Length; i++)
             _lastValidVertices[i] = new Vector3(_vertices[i].x, _vertices[i].y, _vertices[i].z);
+
+        UpdateGraphicTransform();
     }
 
     private void OnDrawGizmos()
     {
         if (_vertices == null || _vertices.Length != 8)
+        {
+            InitializeVertices();
             return;
+        }
 
         Gizmos.color = Color.yellow;
 

@@ -13,6 +13,9 @@ namespace GMTK_2024_RA.GameName.Systems.Dialogue
         }
         public void MissionCompleted(bool missionIsCompleted, string message)
         {
+            animator = GetComponentInChildren<Animator>();
+            dialogue = GetComponent<DialogueTrigger>();
+
             if (missionIsCompleted)
             {
                 //Happy state

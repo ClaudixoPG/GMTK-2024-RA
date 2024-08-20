@@ -56,6 +56,9 @@ public class ScalableObjectGizmoHandler : MonoBehaviour
 
         if (_mouseLeftButtonAction.WasPerformedThisFrame())
         {
+            if (_current != null && _current.IsOver)
+                return;
+
             if (_over != null)
             {
                 var pivot = _over.transform.parent.GetComponentInParent<ScalableObject>().GetComponentInChildren<PivotController>(true);

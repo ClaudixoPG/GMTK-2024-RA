@@ -497,12 +497,15 @@ MonoBehaviour:
   constrain_x:
     min: 0.25
     max: 2
+    initial: 1
   constrain_y:
     min: 0.25
     max: 2
+    initial: 1
   constrain_z:
     min: 0.25
     max: 2
+    initial: 1
   _controller: {fileID: 841751381213093252}
   _graphic: {fileID: 1906369675888791371}
 --- !u!1 &4069012353140236305

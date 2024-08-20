@@ -28,6 +28,10 @@ public class PivotController : MonoBehaviour
     public delegate void Scaling(Vector3 axis, float amount, float mouseDeltaMgn);
     public event Scaling OnScaling;
 
+    private bool _isOver;
+
+    public bool IsOver => _isOver;
+
     private float _stepTimer;
     private float _stepTimerCC = 0.1f;
 
@@ -178,6 +182,8 @@ public class PivotController : MonoBehaviour
         {
             _overGizmosAxis = null;
         }
+
+        _isOver = _overGizmosAxis != null;
 
         if (_selectedGizmosAxis.Count == 0) return;
 
